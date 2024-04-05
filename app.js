@@ -127,7 +127,7 @@ for (const contact of pruebaContacts) {
                                 zip: '',
                                 state: customerAddress.state
                             },
-                            customerNotes: 'Envio de cliente desde clientify',
+                            customerNotes: 'Clientify revisar info',
                         }
                     };
 
@@ -251,7 +251,7 @@ for (const contact of pruebaContacts) {
                                 zip: '',
                                 state: customerAddress.state
                             },
-                            customerNotes: 'Envio de cliente desde clientify',
+                            customerNotes: 'Clientify revisar info',
                         }
                     };
 
@@ -265,7 +265,265 @@ for (const contact of pruebaContacts) {
                         console.error('Error en la solicitud POST a cleancloudapp.com:', error.response.data);
                     }
                     /************************************************** */
-                } else {
+
+                    //////////////////MEDELLIN
+                } if (contact.tags && (contact.tags.includes('cleancloud_medellin'))) {
+
+                    let cleanCloudToken = "618343296f350db2fdb513caf966f5d63c7e4f7a";
+
+                    if (!cleanCloudToken) {
+                        console.error('Token de autorización no proporcionado. Asegúrate de configurar la variable de entorno CLIENTIFY_TOKEN.');
+                        process.exit(1);
+                    }
+
+                    let numeroApartamento = 'N/A';
+                    const numeroApartamentoField = contact.custom_fields.find(field => field.field === 'Numero de apartamento');
+                    numeroApartamento = numeroApartamentoField ? numeroApartamentoField.value : 'N/A';
+
+                    const customerAddress = {
+                        street: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].street : 'N/A',
+                        apartment: numeroApartamento,
+                        city: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].city : 'N/A',
+                        state: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].state : 'N/A',
+                        country: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].country : 'N/A'
+                    };
+
+
+
+                    const formattedCustomerAddress = `${customerAddress.street}, apt: ${customerAddress.apartment}, ${customerAddress.city}, ${customerAddress.state}, ${customerAddress.country}`;
+
+                    const postConfig = {
+                        method: 'POST',
+                        url: 'https://cleancloudapp.com/api/addCustomer',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            api_token: cleanCloudToken,
+                            customerName: `${contact.first_name}`,
+                            customerTel: contact.phones && contact.phones.length > 0 ? contact.phones[0].phone : '',
+                            customerEmail: contact.emails && contact.emails.length > 0 ? contact.emails[0].email : '',
+                            customerAddress: formattedCustomerAddress,
+                            customerAddressInstructions: formattedCustomerAddress,
+                            addressDetailed: {
+                                street: customerAddress.street,
+                                unit: customerAddress.apartment,
+                                city: customerAddress.city,
+                                zip: '',
+                                state: customerAddress.state
+                            },
+                            customerNotes: 'Clientify revisar info',
+                        }
+                    };
+
+                    try {
+                        console.log('Enviando solicitud POST a cleancloudapp.com...');
+                        const postResponse = await axios(postConfig);
+                        console.log('Solicitud POST enviada con éxito:');
+                        console.log('Status:', postResponse.status);
+                        console.log('Response:', postResponse.data);
+                    } catch (error) {
+                        console.error('Error en la solicitud POST a cleancloudapp.com:', error.response.data);
+                    }
+                    /************************************************** */
+                }
+
+
+
+/*******************************MNEXICO *******************////
+
+
+                if (contact.tags && (contact.tags.includes('cleancloud_mx'))) {
+
+                    let cleanCloudToken = "0cdd8e316ced965bb8332067c770e4c1b113be88";
+
+                    if (!cleanCloudToken) {
+                        console.error('Token de autorización no proporcionado. Asegúrate de configurar la variable de entorno CLIENTIFY_TOKEN.');
+                        process.exit(1);
+                    }
+
+                    let numeroApartamento = 'N/A';
+                    const numeroApartamentoField = contact.custom_fields.find(field => field.field === 'Numero de apartamento');
+                    numeroApartamento = numeroApartamentoField ? numeroApartamentoField.value : 'N/A';
+
+                    const customerAddress = {
+                        street: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].street : 'N/A',
+                        apartment: numeroApartamento,
+                        city: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].city : 'N/A',
+                        state: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].state : 'N/A',
+                        country: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].country : 'N/A'
+                    };
+
+
+
+                    const formattedCustomerAddress = `${customerAddress.street}, apt: ${customerAddress.apartment}, ${customerAddress.city}, ${customerAddress.state}, ${customerAddress.country}`;
+
+                    const postConfig = {
+                        method: 'POST',
+                        url: 'https://cleancloudapp.com/api/addCustomer',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            api_token: cleanCloudToken,
+                            customerName: `${contact.first_name}`,
+                            customerTel: contact.phones && contact.phones.length > 0 ? contact.phones[0].phone : '',
+                            customerEmail: contact.emails && contact.emails.length > 0 ? contact.emails[0].email : '',
+                            customerAddress: formattedCustomerAddress,
+                            customerAddressInstructions: formattedCustomerAddress,
+                            addressDetailed: {
+                                street: customerAddress.street,
+                                unit: customerAddress.apartment,
+                                city: customerAddress.city,
+                                zip: '',
+                                state: customerAddress.state
+                            },
+                            customerNotes: 'Clientify revisar info',
+                        }
+                    };
+
+                    try {
+                        console.log('Enviando solicitud POST a cleancloudapp.com...');
+                        const postResponse = await axios(postConfig);
+                        console.log('Solicitud POST enviada con éxito:');
+                        console.log('Status:', postResponse.status);
+                        console.log('Response:', postResponse.data);
+                    } catch (error) {
+                        console.error('Error en la solicitud POST a cleancloudapp.com:', error.response.data);
+                    }
+                    /************************************************** */
+                }
+
+
+
+                    /*****************ECUADOR************************ */
+
+
+
+                if (contact.tags && (contact.tags.includes('cleancloud_ec'))) {
+
+                    let cleanCloudToken = "760bacb9db52fd8df07d18288cbc4fef44a1e680";
+
+                    if (!cleanCloudToken) {
+                        console.error('Token de autorización no proporcionado. Asegúrate de configurar la variable de entorno CLIENTIFY_TOKEN.');
+                        process.exit(1);
+                    }
+
+                    let numeroApartamento = 'N/A';
+                    const numeroApartamentoField = contact.custom_fields.find(field => field.field === 'Numero de apartamento');
+                    numeroApartamento = numeroApartamentoField ? numeroApartamentoField.value : 'N/A';
+
+                    const customerAddress = {
+                        street: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].street : 'N/A',
+                        apartment: numeroApartamento,
+                        city: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].city : 'N/A',
+                        state: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].state : 'N/A',
+                        country: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].country : 'N/A'
+                    };
+
+
+
+                    const formattedCustomerAddress = `${customerAddress.street}, apt: ${customerAddress.apartment}, ${customerAddress.city}, ${customerAddress.state}, ${customerAddress.country}`;
+
+                    const postConfig = {
+                        method: 'POST',
+                        url: 'https://cleancloudapp.com/api/addCustomer',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            api_token: cleanCloudToken,
+                            customerName: `${contact.first_name}`,
+                            customerTel: contact.phones && contact.phones.length > 0 ? contact.phones[0].phone : '',
+                            customerEmail: contact.emails && contact.emails.length > 0 ? contact.emails[0].email : '',
+                            customerAddress: formattedCustomerAddress,
+                            customerAddressInstructions: formattedCustomerAddress,
+                            addressDetailed: {
+                                street: customerAddress.street,
+                                unit: customerAddress.apartment,
+                                city: customerAddress.city,
+                                zip: '',
+                                state: customerAddress.state
+                            },
+                            customerNotes: 'Clientify revisar info',
+                        }
+                    };
+
+                    try {
+                        console.log('Enviando solicitud POST a cleancloudapp.com...');
+                        const postResponse = await axios(postConfig);
+                        console.log('Solicitud POST enviada con éxito:');
+                        console.log('Status:', postResponse.status);
+                        console.log('Response:', postResponse.data);
+                    } catch (error) {
+                        console.error('Error en la solicitud POST a cleancloudapp.com:', error.response.data);
+                    }
+                    /************************************************** */
+                }
+
+                if (contact.tags && (contact.tags.includes('cleancloud_us'))) {
+
+                    let cleanCloudToken = "f641d09b6e2bacd3605d82aa94e98b58e169e583";
+
+                    if (!cleanCloudToken) {
+                        console.error('Token de autorización no proporcionado. Asegúrate de configurar la variable de entorno CLIENTIFY_TOKEN.');
+                        process.exit(1);
+                    }
+
+                    let numeroApartamento = 'N/A';
+                    const numeroApartamentoField = contact.custom_fields.find(field => field.field === 'Numero de apartamento');
+                    numeroApartamento = numeroApartamentoField ? numeroApartamentoField.value : 'N/A';
+
+                    const customerAddress = {
+                        street: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].street : 'N/A',
+                        apartment: numeroApartamento,
+                        city: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].city : 'N/A',
+                        state: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].state : 'N/A',
+                        country: contact.addresses && contact.addresses.length > 0 ? contact.addresses[0].country : 'N/A'
+                    };
+
+
+
+                    const formattedCustomerAddress = `${customerAddress.street}, apt: ${customerAddress.apartment}, ${customerAddress.city}, ${customerAddress.state}, ${customerAddress.country}`;
+
+                    const postConfig = {
+                        method: 'POST',
+                        url: 'https://cleancloudapp.com/api/addCustomer',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            api_token: cleanCloudToken,
+                            customerName: `${contact.first_name}`,
+                            customerTel: contact.phones && contact.phones.length > 0 ? contact.phones[0].phone : '',
+                            customerEmail: contact.emails && contact.emails.length > 0 ? contact.emails[0].email : '',
+                            customerAddress: formattedCustomerAddress,
+                            customerAddressInstructions: formattedCustomerAddress,
+                            addressDetailed: {
+                                street: customerAddress.street,
+                                unit: customerAddress.apartment,
+                                city: customerAddress.city,
+                                zip: '',
+                                state: customerAddress.state
+                            },
+                            customerNotes: 'Clientify revisar info',
+                        }
+                    };
+
+                    try {
+                        console.log('Enviando solicitud POST a cleancloudapp.com...');
+                        const postResponse = await axios(postConfig);
+                        console.log('Solicitud POST enviada con éxito:');
+                        console.log('Status:', postResponse.status);
+                        console.log('Response:', postResponse.data);
+                    } catch (error) {
+                        console.error('Error en la solicitud POST a cleancloudapp.com:', error.response.data);
+                    }
+                    /************************************************** */
+                }
+                
+
+                 else {
 
                     console.log('El contacto no tiene las etiquetas designadas, no se realizará la solicitud POST.');
                 }
